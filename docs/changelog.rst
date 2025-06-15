@@ -123,6 +123,11 @@ Detailed list of changes
 
 - Graphics protocol: Add a note clarifying image update behavior on re-transmission (:iss:`8701`)
 
+- Wayland GNOME: Fix incorrect OS Window tracking because GNOME has started
+  activating windows on non-current workspaces (:iss:`8716`)
+
+- Fix a regression in 0.40.0 that broke rendering of VS15 variation selectors in some circumstances (:iss:`8731`)
+
 0.42.1 [2025-05-17]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
