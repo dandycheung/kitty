@@ -118,6 +118,9 @@ Detailed list of changes
 - macOS: Fix hiding quick access terminal window not restoring focus to
   previously active application (:disc:`8840`)
 
+- Special case backspacing when cursor is off the right edge of the screen to
+  backspace two cells. (:iss:`8841`)
+
 0.42.2 [2025-07-16]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

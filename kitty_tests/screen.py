@@ -162,7 +162,7 @@ class TestScreen(BaseTest):
             s.reset(), s.reset_dirty()
             s.draw('abcde')
             s.cursor.bold = True
-            s.cursor_back(4)
+            s.cursor_back(3)  # cursor is off the edge of screen but in this situation a single back moves it back two cells
             s.reset_dirty()
             self.ae(s.cursor.x, 1)
 
@@ -561,11 +561,13 @@ class TestScreen(BaseTest):
                     # Simple wrapping
                     s.cursor_position(region, s.columns), s.draw(chr(ord('A') + i - 1).lower() + ch)
                     # Backspace at right margin
-                    s.cursor_position(region + 1, s.columns), s.draw(ch), s.backspace(), s.draw(ch.lower())
+                    s.cursor_position(region + 1, s.columns), s.draw(ch), s.backspace()
+                    s.cursor.x += 1
+                    s.draw(ch.lower())
                     nl()
                 elif which == 2:
                     # Tab to right margin
-                    s.cursor_position(region + 1, s.columns), s.draw(ch), s.backspace(), s.backspace(), s.tab(), s.tab(), s.draw(ch.lower())
+                    s.cursor_position(region + 1, s.columns), s.draw(ch), s.backspace(), s.tab(), s.tab(), s.draw(ch.lower())
                     s.cursor_position(region + 1, 2), s.backspace(), s.draw(ch), nl()
                 else:
                     s.cursor_position(region + 1, 1), nl()

@@ -1962,8 +1962,21 @@ screen_set_tab_stop(Screen *self) {
 void
 screen_cursor_back(Screen *self, unsigned int count/*=1*/, int move_direction/*=-1*/) {
     if (count == 0) count = 1;
-    if (move_direction < 0 && count > self->cursor->x) self->cursor->x = 0;
-    else self->cursor->x += move_direction * count;
+    if (move_direction < 0) {
+        // we allow the cursor to go off the right edge of the screen when
+        // drawing a char in the rightmost cell. This is different form most
+        // terminals. Because of the behavior of most terminals, the execrable
+        // ncurses assumes that drawing a char on the right most cell and then
+        // doing a backspace actually moves the cursor back two spaces. Sigh.
+        // Note that doing this means that when inputting in cooked mode, for
+        // example, using `read` in a shell and typing to the right edge of the
+        // screen and doing backspace, the rightmost cell retains text and the
+        // text from the right but one cell is deleted, which is wrong since
+        // the kernel buffer only deletes the rightmost cell.
+        if (self->cursor->x >= self->columns) self->cursor->x = self->columns-1;
+        if (count > self->cursor->x) count = self->cursor->x;
+    }
+    self->cursor->x += move_direction * count;
     screen_ensure_bounds(self, false, cursor_within_margins(self));
 }
 
